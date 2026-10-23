@@ -7,18 +7,30 @@ TAG='V'+VERSION
 # Media files are not part of this repository (see ASSETS.md). Place them in media/ and media-compressed/ to rebuild.
 O=ROOT+'/src'; M=ROOT+'/media'; G=ROOT+'/media-compressed'
 mime={'.webp':'image/webp','.mp3':'audio/mpeg','.woff':'font/woff','.wav':'audio/wav','.jpg':'image/jpeg'}
-mp={}
-# V1 sıkıştırılmış set (jpg→webp, wav→mp3, ttf→woff) orijinal anahtar adıyla
-for f in sorted(os.listdir(G)):
-    b,e=os.path.splitext(f)
-    key=b+('.jpg' if e=='.webp' else '.ttf' if e=='.woff' else ('.wav' if os.path.exists(M+'/'+b+'.wav') else '.mp3'))
-    mp[key]=(G+'/'+f,e)
-SKIP=re.compile(r'^(metal-|hucre-\d|sure-cubuk-|Gemini-Rakamlar-1-4)')
-for p in glob.glob(M+'/*.webp')+glob.glob(M+'/harf/*.webp'):
-    key=os.path.relpath(p,M)
-    if SKIP.match(os.path.basename(key)): continue
-    mp[key]=(p,'.webp')
-data={k:'data:'+mime[e]+';base64,'+base64.b64encode(open(p,'rb').read()).decode() for k,(p,e) in mp.items()}
+def embed_from_media():
+    mp={}
+    # V1 sıkıştırılmış set (jpg→webp, wav→mp3, ttf→woff) orijinal anahtar adıyla
+    for f in sorted(os.listdir(G)):
+        b,e=os.path.splitext(f)
+        key=b+('.jpg' if e=='.webp' else '.ttf' if e=='.woff' else ('.wav' if os.path.exists(M+'/'+b+'.wav') else '.mp3'))
+        mp[key]=(G+'/'+f,e)
+    SKIP=re.compile(r'^(metal-|hucre-\d|sure-cubuk-|Gemini-Rakamlar-1-4)')
+    for p in glob.glob(M+'/*.webp')+glob.glob(M+'/harf/*.webp'):
+        key=os.path.relpath(p,M)
+        if SKIP.match(os.path.basename(key)): continue
+        mp[key]=(p,'.webp')
+    return {k:'data:'+mime[e]+';base64,'+base64.b64encode(open(p,'rb').read()).decode() for k,(p,e) in mp.items()}
+def embed_from_index():
+    # Medya dizinleri yoksa (depoda tutulmuyor) gömülü NEON_V1_MAP'i mevcut index.html'den geri al.
+    h=open(ROOT+'/index.html',encoding='utf-8').read()
+    a=h.find('globalThis.NEON_V1_MAP = {\n'); assert a>0, 'index.html içinde NEON_V1_MAP yok'
+    b=h.find('\n};\n',a); assert b>a
+    import json
+    return json.loads('{'+h[a+len('globalThis.NEON_V1_MAP = {\n'):b]+'}')
+if os.path.isdir(M) and os.path.isdir(G):
+    data=embed_from_media(); print('medya: media/ ve media-compressed/')
+else:
+    data=embed_from_index(); print('medya: index.html içinden yeniden kullanıldı (media/ yok)')
 order=['v1-entegrasyon.js','v1-tema.js','v1-sinema.js','v1-trol.js','v1-boss.js','v1-cehennem.js','v1-yazi.js','v1-menu.js','v1-perf.js','v1-dokunus.js','v1-denge.js']
 src=''
 for f in order:
