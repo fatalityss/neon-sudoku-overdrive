@@ -4,7 +4,7 @@
   const NS = globalThis.NeonSudoku;
   if (!NS || NS.V1_TEMA) return;
   NS.V1_TEMA = true;
-  NS.SURUM = '1.51';
+  NS.SURUM = globalThis.NEON_VERSION || '1.51'; /* build.py VERSION dosyasından basar; kaynaktan açılırken yedek */
   const P = NS.Game.prototype;
   const T = {
     A: { ad: 'Buz Mavisi', top: '#14344a', bot: '#07131d', side: '#03080d', edge: '#45e4ff', dig: '#e6fbff', glow: '#22d3ff', btop: '#123044', bbot: '#081621', btxt: '#e9fbff' },

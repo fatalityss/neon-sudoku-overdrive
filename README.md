@@ -2,7 +2,7 @@
 
 A fast, arcade-style 4×4 Sudoku for mobile browsers. Instead of writing digits, you eliminate wrong candidates under a 30-second timer while bosses attack your time bar.
 
-**Status:** in active development. The current build is V1.51.
+**Status:** in active development. The current build is V1.52 (see [`VERSION`](VERSION) and the [changelog](CHANGELOG.md)).
 
 **Play:** https://fatalityss.github.io/neon-sudoku-overdrive/ (works best on a phone, in portrait)
 
@@ -44,10 +44,12 @@ src/
   v1-denge.js         timer balancing
 build/
   build.py            embeds all assets and builds a single offline HTML file
-index.html            the built game (V1.51)
+VERSION               current build number (read by build.py)
+CHANGELOG.md          release notes
+index.html            the built game (V1.52)
 ```
 
-Each `v1-*.js` file extends the base game's prototype, and they load in the order listed above. `build/build.py` base64-embeds every image, sound and font into one self-contained `index.html`, so the game runs offline and can be opened directly on a phone.
+Each `v1-*.js` file extends the base game's prototype, and they load in the order listed above. `build/build.py` base64-embeds every image, sound and font into one self-contained `index.html`, so the game runs offline and can be opened directly on a phone. The build number is read from `VERSION` and stamped into the page title and `globalThis.NEON_VERSION`; bump that file before rebuilding a release. If `media/` and `media-compressed/` are not present, the script reuses the assets already embedded in the current `index.html`, so code-only changes can be rebuilt from a plain checkout with `python3 build/build.py`.
 
 Timer formula (V1.50): starting time is `30 + max(0, moves − 12) × 0.9` seconds, which gives 30–52 seconds per level.
 
