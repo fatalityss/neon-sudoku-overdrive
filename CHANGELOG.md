@@ -25,8 +25,8 @@ All notable changes to Neon Sudoku: Overdrive are recorded here. The project use
 
 - Button press feedback (`src/v1-dokunus.js`): press darkening, ember sparks, edge glow and a new click sound.
 
-[Unreleased]: https://github.com/fatalityss/neon-sudoku-overdrive/compare/v1.52...HEAD
-[1.52]: https://github.com/fatalityss/neon-sudoku-overdrive/compare/c739485...v1.52
+[Unreleased]: https://github.com/fatalityss/neon-sudoku-overdrive/compare/bbfb357...HEAD
+[1.52]: https://github.com/fatalityss/neon-sudoku-overdrive/compare/c739485...bbfb357
 [1.51]: https://github.com/fatalityss/neon-sudoku-overdrive/tree/c739485
 [1.50]: https://github.com/fatalityss/neon-sudoku-overdrive/blob/main/src/v1-denge.js
 [1.46]: https://github.com/fatalityss/neon-sudoku-overdrive/blob/main/src/v1-dokunus.js
